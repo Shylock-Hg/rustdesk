@@ -2,6 +2,7 @@ use super::xdo::EnigoXdo;
 use crate::{Key, KeyboardControllable, MouseButton, MouseControllable, ResultType};
 use std::io::Read;
 use tfc::{traits::*, Context as TFC_Context, Key as TFC_Key};
+use log;
 
 pub type CustomKeyboard = Box<dyn KeyboardControllable + Send>;
 pub type CustomMouce = Box<dyn MouseControllable + Send>;
