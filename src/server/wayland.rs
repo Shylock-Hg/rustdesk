@@ -187,9 +187,9 @@ pub(super) async fn check_init() -> ResultType<()> {
                 };
 
                 minx = 0;
-                maxx = 1707;
+                maxx = max_width;
                 miny = 0;
-                maxy = 897;
+                maxy = max_height;
                 log::info!("DEBUG POINT: get width: {}, height: {}", maxx, maxy);
 
                 let capturer = Box::into_raw(Box::new(
