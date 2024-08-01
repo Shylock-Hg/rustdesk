@@ -1,7 +1,7 @@
 use crate::uinput::service::map_key;
 use dbus::{blocking::SyncConnection, Path};
 use enigo::{Key, KeyboardControllable, MouseButton, MouseControllable};
-use hbb_common::ResultType;
+use hbb_common::{ResultType, log};
 use scrap::wayland::pipewire::{get_portal, PwStreamInfo};
 use scrap::wayland::remote_desktop_portal::OrgFreedesktopPortalRemoteDesktop as remote_desktop_portal;
 use std::collections::HashMap;
