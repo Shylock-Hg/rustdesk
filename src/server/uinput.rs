@@ -137,9 +137,11 @@ pub mod client {
         }
 
         fn mouse_move_to(&mut self, x: i32, y: i32) {
+            log::info!("DEBUG POINT: move to [{}, {}]", x, y);
             allow_err!(self.send(Data::Mouse(DataMouse::MoveTo(x, y))));
         }
         fn mouse_move_relative(&mut self, x: i32, y: i32) {
+            log::info!("DEBUG POINT: move to relative [{}, {}]", x, y);
             allow_err!(self.send(Data::Mouse(DataMouse::MoveRelative(x, y))));
         }
         // TODO: handle error???
