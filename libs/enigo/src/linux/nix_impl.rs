@@ -150,6 +150,7 @@ impl MouseControllable for Enigo {
             self.xdo.mouse_move_to(x, y);
         } else {
             if let Some(mouse) = &mut self.custom_mouse {
+                log::info!("DEBUG POINT: move to [{}, {}]", x, y);
                 mouse.mouse_move_to(x, y)
             }
         }
@@ -159,6 +160,7 @@ impl MouseControllable for Enigo {
             self.xdo.mouse_move_relative(x, y);
         } else {
             if let Some(mouse) = &mut self.custom_mouse {
+                log::info!("DEBUG POINT: move to relative [{}, {}]", x, y);
                 mouse.mouse_move_relative(x, y)
             }
         }
