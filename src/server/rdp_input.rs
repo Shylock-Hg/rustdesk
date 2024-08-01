@@ -93,6 +93,7 @@ pub mod client {
         }
 
         fn mouse_move_to(&mut self, x: i32, y: i32) {
+            log::info!("DEBUG POINT: move to [{}, {}]", x, y);
             let portal = get_portal(&self.conn);
             let _ = remote_desktop_portal::notify_pointer_motion_absolute(
                 &portal,
@@ -104,6 +105,7 @@ pub mod client {
             );
         }
         fn mouse_move_relative(&mut self, x: i32, y: i32) {
+            log::info!("DEBUG POINT: move to relative [{}, {}]", x, y);
             let portal = get_portal(&self.conn);
             let _ = remote_desktop_portal::notify_pointer_motion(
                 &portal,
