@@ -130,6 +130,7 @@ fn get_max_desktop_resolution() -> Option<String> {
 }
 
 pub(super) async fn check_init() -> ResultType<()> {
+    log::info!("DEBUG POINT: check init");
     if !is_x11() {
         let mut minx = 0;
         let mut maxx = 0;
