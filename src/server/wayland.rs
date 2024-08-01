@@ -187,10 +187,10 @@ pub(super) async fn check_init() -> ResultType<()> {
                 };
 
                 minx = 0;
-                maxx = 3840;
+                maxx = 1707;
                 miny = 0;
-                maxy = 2018;
-                log::info!("DEBUG POINT: get width: {}, height: {}", max_width, max_height);
+                maxy = 897;
+                log::info!("DEBUG POINT: get width: {}, height: {}", maxx, maxy);
 
                 let capturer = Box::into_raw(Box::new(
                     Capturer::new(display).with_context(|| "Failed to create capturer")?,
