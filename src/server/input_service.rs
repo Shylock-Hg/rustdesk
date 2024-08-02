@@ -927,6 +927,7 @@ pub fn handle_mouse_(evt: &MouseEvent, conn: i32) {
     }
     match evt_type {
         MOUSE_TYPE_MOVE => {
+            log::info!("DEBUG POINT: move to [{}, {}]", evt.x, evt.y);
             en.mouse_move_to(evt.x, evt.y);
             *LATEST_PEER_INPUT_CURSOR.lock().unwrap() = Input {
                 conn,
