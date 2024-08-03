@@ -3,6 +3,7 @@ use crate::client::translate;
 #[cfg(not(debug_assertions))]
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 use crate::platform::breakdown_callback;
+use gdk::prelude::MonitorExt;
 #[cfg(not(debug_assertions))]
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 use hbb_common::platform::register_breakdown_handler;
@@ -23,6 +24,20 @@ macro_rules! my_println{
         );
     };
 }
+
+fn get_scale_factor() -> f64 {
+    #[cfg(not(target_os = "linux"))]
+    return 1.0;
+    // let screen = gdk::Screen::default().unwrap();
+    // let monitor = screen.
+    // let scale_factor = screen.monitor_scale_factor(0);
+    let display = gdk::Display::default().unwrap();
+    let monitor = display.monitor(0).unwrap();
+    let scale_factor = monitor.scale_factor() as f64;
+    log::info!("DEBUG POINT: scale factor: {}", scale_factor);
+    return scale_factor;
+}
+
 
 /// shared by flutter and sciter main function
 ///
@@ -167,7 +182,7 @@ pub fn core_main() -> Option<Vec<String>> {
     init_plugins(&args);
     log::info!("main start args:{:?}", args);
     if args.is_empty() || crate::common::is_empty_uni_link(&args[0]) {
-        std::thread::spawn(move || crate::start_server(false));
+        std::thread::spawn(move || crate::start_server(false, get_scale_factor()));
     } else {
         #[cfg(windows)]
         {
@@ -269,7 +284,7 @@ pub fn core_main() -> Option<Vec<String>> {
             crate::privacy_mode::restore_reg_connectivity(true);
             #[cfg(any(target_os = "linux", target_os = "windows"))]
             {
-                crate::start_server(true);
+                crate::start_server(true, get_scale_factor());
             }
             #[cfg(target_os = "macos")]
             {

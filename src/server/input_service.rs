@@ -516,7 +516,7 @@ pub async fn setup_uinput(minx: i32, maxx: i32, miny: i32, maxy: i32) -> ResultT
 }
 
 #[cfg(target_os = "linux")]
-pub async fn setup_rdp_input() -> ResultType<(), Box<dyn std::error::Error>> {
+pub async fn setup_rdp_input(scale_factor: f64) -> ResultType<(), Box<dyn std::error::Error>> {
     let mut en = ENIGO.lock()?;
     let rdp_res_lock = RDP_RESPONSE.lock()?;
     let rdp_res = rdp_res_lock.as_ref().ok_or("RDP response is None")?;
@@ -526,7 +526,7 @@ pub async fn setup_rdp_input() -> ResultType<(), Box<dyn std::error::Error>> {
     log::info!("RdpInput keyboard created");
 
     if let Some(stream) = rdp_res.streams.clone().into_iter().next() {
-        let mouse = RdpInputMouse::new(rdp_res.conn.clone(), rdp_res.session.clone(), stream)?;
+        let mouse = RdpInputMouse::new(rdp_res.conn.clone(), rdp_res.session.clone(), stream, scale_factor)?;
         en.set_custom_mouse(Box::new(mouse));
         log::info!("RdpInput mouse created");
     }

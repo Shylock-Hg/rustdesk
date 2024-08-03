@@ -458,7 +458,7 @@ pub async fn start_server(_is_server: bool) {
 /// Otherwise, client will check if there's already a server and start one if not.
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 #[tokio::main]
-pub async fn start_server(is_server: bool) {
+pub async fn start_server(is_server: bool, scale_factor: f64) {
     #[cfg(target_os = "linux")]
     {
         log::info!("DISPLAY={:?}", std::env::var("DISPLAY"));
@@ -517,7 +517,7 @@ pub async fn start_server(is_server: bool) {
             }
             Err(err) => {
                 log::info!("server not started (will try to start): {}", err);
-                std::thread::spawn(|| start_server(true));
+                std::thread::spawn(move || start_server(true, scale_factor));
             }
         }
     }

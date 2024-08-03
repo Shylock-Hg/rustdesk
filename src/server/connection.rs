@@ -1319,7 +1319,7 @@ impl Connection {
                     {
                         // use rdp_input when uinput is not available in wayland. Ex: flatpak
                         if !is_x11() && !crate::is_server() {
-                            let _ = setup_rdp_input().await;
+                            let _ = setup_rdp_input(1.0).await;
                         }
                     }
                 }

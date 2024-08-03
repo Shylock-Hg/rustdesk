@@ -66,17 +66,6 @@ pub mod client {
         }
     }
 
-    fn get_scale_factor() -> f64 {
-        // let screen = gdk::Screen::default().unwrap();
-        // let monitor = screen.
-        // let scale_factor = screen.monitor_scale_factor(0);
-        let display = gdk::Display::default().unwrap();
-        let monitor = display.monitor(0).unwrap();
-        let scale_factor = monitor.scale_factor() as f64;
-        log::info!("DEBUG POINT: scale factor: {}", scale_factor);
-        return scale_factor;
-    }
-
     pub struct RdpInputMouse {
         conn: Arc<SyncConnection>,
         session: Path<'static>,
@@ -89,8 +78,8 @@ pub mod client {
             conn: Arc<SyncConnection>,
             session: Path<'static>,
             stream: PwStreamInfo,
+            scale_factor: f64,
         ) -> ResultType<Self> {
-            let scale_factor = get_scale_factor();
             Ok(Self {
                 conn,
                 session,
