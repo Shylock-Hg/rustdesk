@@ -52,7 +52,6 @@ pub fn core_main() -> Option<Vec<String>> {
     #[cfg(target_os = "linux")]
     gdk::init();
     let scale_factor = get_scale_factor();
-    log::info!("DEBUG POINT: scale factor: {}", scale_factor);
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();
     let mut i = 0;
@@ -183,6 +182,7 @@ pub fn core_main() -> Option<Vec<String>> {
     #[cfg(not(any(target_os = "android", target_os = "ios")))]
     init_plugins(&args);
     log::info!("main start args:{:?}", args);
+    log::info!("DEBUG POINT: scale factor: {}", scale_factor);
     if args.is_empty() || crate::common::is_empty_uni_link(&args[0]) {
         std::thread::spawn(move || crate::start_server(false));
     } else {
