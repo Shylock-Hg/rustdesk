@@ -9,6 +9,8 @@ use hbb_common::platform::register_breakdown_handler;
 use hbb_common::{config, log};
 #[cfg(windows)]
 use tauri_winrt_notification::{Duration, Sound, Toast};
+#[cfg(target_os = "linux")]
+use gdk;
 
 #[macro_export]
 macro_rules! my_println{
@@ -32,6 +34,8 @@ pub fn core_main() -> Option<Vec<String>> {
     crate::load_custom_client();
     #[cfg(windows)]
     crate::platform::windows::bootstrap();
+    #[cfg(target_os = "linux")]
+    gdk::init();
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();
     let mut i = 0;
