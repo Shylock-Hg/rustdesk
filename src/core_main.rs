@@ -51,7 +51,8 @@ pub fn core_main() -> Option<Vec<String>> {
     crate::platform::windows::bootstrap();
     #[cfg(target_os = "linux")]
     gdk::init();
-    let _ = get_scale_factor();
+    let scale_factor = get_scale_factor();
+    log::info!("DEBUG POINT: scale factor: {}", scale_factor);
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();
     let mut i = 0;
