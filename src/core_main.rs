@@ -51,6 +51,7 @@ pub fn core_main() -> Option<Vec<String>> {
     crate::platform::windows::bootstrap();
     #[cfg(target_os = "linux")]
     gdk::init();
+    let _ = get_scale_factor();
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();
     let mut i = 0;
@@ -182,7 +183,7 @@ pub fn core_main() -> Option<Vec<String>> {
     init_plugins(&args);
     log::info!("main start args:{:?}", args);
     if args.is_empty() || crate::common::is_empty_uni_link(&args[0]) {
-        std::thread::spawn(move || crate::start_server(false, get_scale_factor()));
+        std::thread::spawn(move || crate::start_server(false));
     } else {
         #[cfg(windows)]
         {
@@ -284,7 +285,7 @@ pub fn core_main() -> Option<Vec<String>> {
             crate::privacy_mode::restore_reg_connectivity(true);
             #[cfg(any(target_os = "linux", target_os = "windows"))]
             {
-                crate::start_server(true, get_scale_factor());
+                crate::start_server(true);
             }
             #[cfg(target_os = "macos")]
             {
