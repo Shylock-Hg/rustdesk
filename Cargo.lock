@@ -5494,6 +5494,7 @@ dependencies = [
  "flutter_rust_bridge",
  "fon",
  "fruitbasket",
+ "gdk",
  "hbb_common",
  "hex",
  "hound",

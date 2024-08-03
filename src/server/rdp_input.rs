@@ -6,8 +6,11 @@ use scrap::wayland::pipewire::{get_portal, PwStreamInfo};
 use scrap::wayland::remote_desktop_portal::OrgFreedesktopPortalRemoteDesktop as remote_desktop_portal;
 use std::collections::HashMap;
 use std::sync::Arc;
+use gdk;
 
 pub mod client {
+    use gdk::prelude::MonitorExt;
+
     use super::*;
 
     const EVDEV_MOUSE_LEFT: i32 = 272;
@@ -63,10 +66,22 @@ pub mod client {
         }
     }
 
+    fn get_scale_factor() -> f64 {
+        // let screen = gdk::Screen::default().unwrap();
+        // let monitor = screen.
+        // let scale_factor = screen.monitor_scale_factor(0);
+        let display = gdk::Display::default().unwrap();
+        let monitor = display.monitor(0).unwrap();
+        let scale_factor = monitor.scale_factor() as f64;
+        log::info!("DEBUG POINT: scale factor: {}", scale_factor);
+        return scale_factor;
+    }
+
     pub struct RdpInputMouse {
         conn: Arc<SyncConnection>,
         session: Path<'static>,
         stream: PwStreamInfo,
+        scale_factor: f64,
     }
 
     impl RdpInputMouse {
@@ -75,10 +90,12 @@ pub mod client {
             session: Path<'static>,
             stream: PwStreamInfo,
         ) -> ResultType<Self> {
+            let scale_factor = get_scale_factor();
             Ok(Self {
                 conn,
                 session,
                 stream,
+                scale_factor,
             })
         }
     }
@@ -93,9 +110,8 @@ pub mod client {
         }
 
         fn mouse_move_to(&mut self, x: i32, y: i32) {
-            let scale = 1.5;
-            let x = (x as f64 / scale) as i32;
-            let y = (y as f64 / scale) as i32;
+            let x = (x as f64 / self.scale_factor) as i32;
+            let y = (y as f64 / self.scale_factor) as i32;
             log::info!("DEBUG POINT: move to [{}, {}]", x, y);
             let portal = get_portal(&self.conn);
             let _ = remote_desktop_portal::notify_pointer_motion_absolute(
@@ -108,6 +124,8 @@ pub mod client {
             );
         }
         fn mouse_move_relative(&mut self, x: i32, y: i32) {
+            let x = (x as f64 / self.scale_factor) as i32;
+            let y = (y as f64 / self.scale_factor) as i32;
             log::info!("DEBUG POINT: move to relative [{}, {}]", x, y);
             let portal = get_portal(&self.conn);
             let _ = remote_desktop_portal::notify_pointer_motion(
