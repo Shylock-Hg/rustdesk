@@ -3,7 +3,6 @@ use crate::client::translate;
 #[cfg(not(debug_assertions))]
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 use crate::platform::breakdown_callback;
-use gdk::prelude::MonitorExt;
 #[cfg(not(debug_assertions))]
 #[cfg(not(any(target_os = "android", target_os = "ios")))]
 use hbb_common::platform::register_breakdown_handler;
@@ -11,7 +10,9 @@ use hbb_common::{config, log};
 #[cfg(windows)]
 use tauri_winrt_notification::{Duration, Sound, Toast};
 #[cfg(target_os = "linux")]
-use gdk;
+use gdk4;
+#[cfg(target_os = "linux")]
+use gdk4::prelude::{MonitorExt, DisplayExt, ListModelExt, Cast};
 
 #[macro_export]
 macro_rules! my_println{
@@ -31,9 +32,9 @@ fn get_scale_factor() -> f64 {
     // let screen = gdk::Screen::default().unwrap();
     // let monitor = screen.
     // let scale_factor = screen.monitor_scale_factor(0);
-    let display = gdk::Display::default().unwrap();
-    let monitor = display.monitor(0).unwrap();
-    let scale_factor = monitor.scale_factor() as f64;
+    let display = gdk4::Display::default().unwrap();
+    let monitor = display.monitors().item(0).unwrap().downcast::<gdk4::Monitor>().unwrap();
+    let scale_factor = monitor.scale();
     log::info!("DEBUG POINT: scale factor: {}", scale_factor);
     return scale_factor;
 }
@@ -49,8 +50,8 @@ pub fn core_main() -> Option<Vec<String>> {
     crate::load_custom_client();
     #[cfg(windows)]
     crate::platform::windows::bootstrap();
-    #[cfg(target_os = "linux")]
-    gdk::init();
+    //#[cfg(target_os = "linux")]
+    // gdk4::init();
     let scale_factor = get_scale_factor();
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();

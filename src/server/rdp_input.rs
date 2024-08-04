@@ -6,10 +6,8 @@ use scrap::wayland::pipewire::{get_portal, PwStreamInfo};
 use scrap::wayland::remote_desktop_portal::OrgFreedesktopPortalRemoteDesktop as remote_desktop_portal;
 use std::collections::HashMap;
 use std::sync::Arc;
-use gdk;
 
 pub mod client {
-    use gdk::prelude::MonitorExt;
 
     use super::*;
 
