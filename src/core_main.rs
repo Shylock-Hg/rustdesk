@@ -1,3 +1,5 @@
+use std::{ffi::c_uint, os::raw::{c_double, c_void}};
+
 #[cfg(windows)]
 use crate::client::translate;
 #[cfg(not(debug_assertions))]
@@ -10,11 +12,7 @@ use hbb_common::{config, log};
 #[cfg(windows)]
 use tauri_winrt_notification::{Duration, Sound, Toast};
 #[cfg(target_os = "linux")]
-use gdk4;
-#[cfg(target_os = "linux")]
-use gtk4;
-#[cfg(target_os = "linux")]
-use gdk4::prelude::{MonitorExt, DisplayExt, ListModelExt, Cast};
+use libloading;
 
 #[macro_export]
 macro_rules! my_println{
@@ -28,13 +26,32 @@ macro_rules! my_println{
     };
 }
 
-fn get_fractional_scale() -> f64 {
+fn call_dynamic() -> Result<u32, Box<dyn std::error::Error>> {
+    unsafe {
+        let lib = libloading::Library::new("/path/to/liblibrary.so")?;
+        let func: libloading::Symbol<unsafe extern fn() -> u32> = lib.get(b"my_func")?;
+        Ok(func())
+    }
+}
+
+fn dl_get_fractional_scale() -> Result<f64, Box<dyn std::error::Error>>{
    #[cfg(not(target_os = "linux"))]
    return 1.0;
 
-   let display = gdk4::Display::default().unwrap();
-   let monitor = display.monitors().item(0).unwrap().downcast::<gdk4::Monitor>().unwrap();
-   return monitor.scale();
+   unsafe {
+        let gtk = libloading::Library::new("libgtk-4.so")?;
+        let gtk_init: libloading::Symbol<unsafe extern fn()> = gtk.get(b"gtk_init")?;
+        gtk_init();
+        let gdk_display_get_default: libloading::Symbol<unsafe extern fn()->*mut c_void> = gtk.get(b"gdk_display_get_default")?;
+        let display = gdk_display_get_default();
+        let gdk_display_get_monitors: libloading::Symbol<unsafe extern fn(*mut c_void) -> *mut c_void> = gtk.get(b"gdk_display_get_monitors")?;
+        let monitors = gdk_display_get_monitors(display);
+        let glib = libloading::Library::new("libglib-2.0.so")?;
+        let g_list_model_get_item : libloading::Symbol<unsafe extern fn(*mut c_void, c_uint) -> *mut c_void> = glib.get(b"g_list_model_get_item")?;
+        let monitor = g_list_model_get_item(monitors, 0);
+        let gdk_monitor_get_scale: libloading::Symbol<unsafe extern fn(*mut c_void) -> c_double> = gtk.get(b"gdk_monitor_get_scale")?;
+        Ok(gdk_monitor_get_scale(monitor))
+   }
 }
 
 /// shared by flutter and sciter main function
@@ -48,8 +65,7 @@ pub fn core_main() -> Option<Vec<String>> {
     #[cfg(windows)]
     crate::platform::windows::bootstrap();
     #[cfg(target_os = "linux")]
-    let _ = gtk4::init();
-    let scale = get_fractional_scale();
+    let scale = dl_get_fractional_scale().unwrap();
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();
     let mut i = 0;
