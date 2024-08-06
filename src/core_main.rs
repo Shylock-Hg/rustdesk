@@ -9,6 +9,12 @@ use hbb_common::platform::register_breakdown_handler;
 use hbb_common::{config, log};
 #[cfg(windows)]
 use tauri_winrt_notification::{Duration, Sound, Toast};
+#[cfg(target_os = "linux")]
+use gdk4;
+#[cfg(target_os = "linux")]
+use gtk4;
+#[cfg(target_os = "linux")]
+use gdk4::prelude::{MonitorExt, DisplayExt, ListModelExt, Cast};
 
 #[macro_export]
 macro_rules! my_println{
@@ -22,6 +28,15 @@ macro_rules! my_println{
     };
 }
 
+fn get_fractional_scale() -> f64 {
+   #[cfg(not(target_os = "linux"))]
+   return 1.0;
+
+   let display = gdk4::Display::default().unwrap();
+   let monitor = display.monitors().item(0).unwrap().downcast::<gdk4::Monitor>().unwrap();
+   return monitor.scale();
+}
+
 /// shared by flutter and sciter main function
 ///
 /// [Note]
@@ -32,6 +47,9 @@ pub fn core_main() -> Option<Vec<String>> {
     crate::load_custom_client();
     #[cfg(windows)]
     crate::platform::windows::bootstrap();
+    #[cfg(target_os = "linux")]
+    let _ = gtk4::init();
+    let scale = get_fractional_scale();
     let mut args = Vec::new();
     let mut flutter_args = Vec::new();
     let mut i = 0;
@@ -162,6 +180,7 @@ pub fn core_main() -> Option<Vec<String>> {
     #[cfg(not(any(target_os = "android", target_os = "ios")))]
     init_plugins(&args);
     log::info!("main start args:{:?}", args);
+    log::info!("DEBUG POINT: scale: {}", scale);
     if args.is_empty() || crate::common::is_empty_uni_link(&args[0]) {
         std::thread::spawn(move || crate::start_server(false));
     } else {
