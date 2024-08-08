@@ -1006,8 +1006,8 @@ dependencies = [
  "objc-foundation",
  "objc_id",
  "wayland-client",
- "wayland-protocols",
- "wayland-protocols-wlr",
+ "wayland-protocols 0.32.3",
+ "wayland-protocols-wlr 0.3.3",
  "windows-win",
  "wl-clipboard-rs",
  "x11-clipboard 0.9.2",
@@ -1402,6 +1402,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "cursor-icon"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96a6ac251f4a2aca6b3f91340350eab87ae57c3f127ffeb585e92bd336717991"
+
+[[package]]
 name = "dart-sys"
 version = "4.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1694,6 +1700,22 @@ name = "dispatch"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bd0c93bb4b0c6d9b77f4435b0ae98c24d17f1c45b2ff844c6151a07256ca923b"
+
+[[package]]
+name = "display-info"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b6e3843b0c9a0470b137a6acc899ef429c9e77082e8a5cceed6896aa5d15d2ea"
+dependencies = [
+ "anyhow",
+ "core-graphics 0.23.2",
+ "fxhash",
+ "log",
+ "smithay-client-toolkit",
+ "widestring",
+ "windows 0.56.0",
+ "xcb",
+]
 
 [[package]]
 name = "dlib"
@@ -2353,6 +2375,15 @@ dependencies = [
  "pin-project-lite",
  "pin-utils",
  "slab",
+]
+
+[[package]]
+name = "fxhash"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c31b6d751ae2c7f11320402d34e41349dd1016f8d5d45e48c4312bc8625af50c"
+dependencies = [
+ "byteorder",
 ]
 
 [[package]]
@@ -3993,6 +4024,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
+name = "memmap2"
+version = "0.9.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe751422e4a8caa417e13c3ea66452215d7d63e19e604f4980461212f3ae1322"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "memoffset"
 version = "0.6.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4405,7 +4445,7 @@ version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "681030a937600a36906c185595136d26abfebb4aa9c65701cefcaf8578bb982b"
 dependencies = [
- "proc-macro-crate 1.3.1",
+ "proc-macro-crate 3.1.0",
  "proc-macro2 1.0.86",
  "quote 1.0.36",
  "syn 2.0.68",
@@ -5794,6 +5834,7 @@ dependencies = [
  "dbus-crossroads",
  "default-net",
  "dispatch",
+ "display-info",
  "enigo",
  "errno",
  "evdev",
@@ -6362,6 +6403,29 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3c5e1a9a646d36c3599cd173a41282daf47c44583ad367b8e6837255952e5c67"
 
 [[package]]
+name = "smithay-client-toolkit"
+version = "0.18.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "922fd3eeab3bd820d76537ce8f582b1cf951eceb5475c28500c7457d9d17f53a"
+dependencies = [
+ "bitflags 2.6.0",
+ "cursor-icon",
+ "libc",
+ "log",
+ "memmap2",
+ "rustix 0.38.34",
+ "thiserror",
+ "wayland-backend",
+ "wayland-client",
+ "wayland-csd-frame",
+ "wayland-cursor",
+ "wayland-protocols 0.31.2",
+ "wayland-protocols-wlr 0.2.0",
+ "wayland-scanner",
+ "xkeysym",
+]
+
+[[package]]
 name = "socket2"
 version = "0.3.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6654,7 +6718,7 @@ dependencies = [
  "unicode-segmentation",
  "url",
  "windows 0.52.0",
- "windows-implement",
+ "windows-implement 0.52.0",
  "windows-version",
  "x11-dl",
  "zbus",
@@ -7512,6 +7576,40 @@ dependencies = [
 ]
 
 [[package]]
+name = "wayland-csd-frame"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "625c5029dbd43d25e6aa9615e88b829a5cad13b2819c4ae129fdbb7c31ab4c7e"
+dependencies = [
+ "bitflags 2.6.0",
+ "cursor-icon",
+ "wayland-backend",
+]
+
+[[package]]
+name = "wayland-cursor"
+version = "0.31.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ef9489a8df197ebf3a8ce8a7a7f0a2320035c3743f3c1bd0bdbccf07ce64f95"
+dependencies = [
+ "rustix 0.38.34",
+ "wayland-client",
+ "xcursor",
+]
+
+[[package]]
+name = "wayland-protocols"
+version = "0.31.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8f81f365b8b4a97f422ac0e8737c438024b5951734506b0e1d775c73030561f4"
+dependencies = [
+ "bitflags 2.6.0",
+ "wayland-backend",
+ "wayland-client",
+ "wayland-scanner",
+]
+
+[[package]]
 name = "wayland-protocols"
 version = "0.32.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7525,6 +7623,19 @@ dependencies = [
 
 [[package]]
 name = "wayland-protocols-wlr"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ad1f61b76b6c2d8742e10f9ba5c3737f6530b4c243132c2a2ccc8aa96fe25cd6"
+dependencies = [
+ "bitflags 2.6.0",
+ "wayland-backend",
+ "wayland-client",
+ "wayland-protocols 0.31.2",
+ "wayland-scanner",
+]
+
+[[package]]
+name = "wayland-protocols-wlr"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fd993de54a40a40fbe5601d9f1fbcaef0aebcc5fda447d7dc8f6dcbaae4f8953"
@@ -7532,7 +7643,7 @@ dependencies = [
  "bitflags 2.6.0",
  "wayland-backend",
  "wayland-client",
- "wayland-protocols",
+ "wayland-protocols 0.32.3",
  "wayland-scanner",
 ]
 
@@ -7756,8 +7867,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e48a53791691ab099e5e2ad123536d0fff50652600abaf43bbf952894110d0be"
 dependencies = [
  "windows-core 0.52.0",
- "windows-implement",
- "windows-interface",
+ "windows-implement 0.52.0",
+ "windows-interface 0.52.0",
  "windows-targets 0.52.5",
 ]
 
@@ -7768,6 +7879,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9252e5725dbed82865af151df558e754e4a3c2c30818359eb17465f1346a1b49"
 dependencies = [
  "windows-core 0.54.0",
+ "windows-targets 0.52.5",
+]
+
+[[package]]
+name = "windows"
+version = "0.56.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1de69df01bdf1ead2f4ac895dc77c9351aefff65b2f3db429a343f9cbf05e132"
+dependencies = [
+ "windows-core 0.56.0",
  "windows-targets 0.52.5",
 ]
 
@@ -7800,6 +7921,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "windows-core"
+version = "0.56.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4698e52ed2d08f8658ab0c39512a7c00ee5fe2688c65f8c0a4f06750d729f2a6"
+dependencies = [
+ "windows-implement 0.56.0",
+ "windows-interface 0.56.0",
+ "windows-result",
+ "windows-targets 0.52.5",
+]
+
+[[package]]
 name = "windows-implement"
 version = "0.52.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7811,10 +7944,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "windows-implement"
+version = "0.56.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6fc35f58ecd95a9b71c4f2329b911016e6bec66b3f2e6a4aad86bd2e99e2f9b"
+dependencies = [
+ "proc-macro2 1.0.86",
+ "quote 1.0.36",
+ "syn 2.0.68",
+]
+
+[[package]]
 name = "windows-interface"
 version = "0.52.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d8dc32e0095a7eeccebd0e3f09e9509365ecb3fc6ac4d6f5f14a3f6392942d1"
+dependencies = [
+ "proc-macro2 1.0.86",
+ "quote 1.0.36",
+ "syn 2.0.68",
+]
+
+[[package]]
+name = "windows-interface"
+version = "0.56.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08990546bf4edef8f431fa6326e032865f27138718c587dc21bc0265bbcb57cc"
 dependencies = [
  "proc-macro2 1.0.86",
  "quote 1.0.36",
@@ -8177,8 +8332,8 @@ dependencies = [
  "tree_magic_mini",
  "wayland-backend",
  "wayland-client",
- "wayland-protocols",
- "wayland-protocols-wlr",
+ "wayland-protocols 0.32.3",
+ "wayland-protocols-wlr 0.3.3",
 ]
 
 [[package]]
@@ -8284,6 +8439,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ec107c4503ea0b4a98ef47356329af139c0a4f7750e621cf2973cd3385ebcb3d"
 
 [[package]]
+name = "xcb"
+version = "1.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "02e75181b5a62b6eeaa72f303d3cef7dbb841e22885bf6d3e66fe23e88c55dc6"
+dependencies = [
+ "bitflags 1.3.2",
+ "libc",
+ "quick-xml 0.30.0",
+]
+
+[[package]]
+name = "xcursor"
+version = "0.3.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d491ee231a51ae64a5b762114c3ac2104b967aadba1de45c86ca42cf051513b7"
+
+[[package]]
 name = "xdg-home"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8292,6 +8464,12 @@ dependencies = [
  "libc",
  "windows-sys 0.52.0",
 ]
+
+[[package]]
+name = "xkeysym"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b9cc00251562a284751c9973bace760d86c0276c471b4be569fe6b068ee97a56"
 
 [[package]]
 name = "zbus"

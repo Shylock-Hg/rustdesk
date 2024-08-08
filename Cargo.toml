@@ -167,6 +167,7 @@ percent-encoding = {version = "2.3", optional = true}
 once_cell = {version = "1.18", optional = true}
 gdk4 = {version = "0.9.0", features = ["v4_14"]}
 gtk4 = {version = "0.9.0"}
+display-info = "0.5.1"
 
 [target.'cfg(target_os = "android")'.dependencies]
 android_logger = "0.13"
