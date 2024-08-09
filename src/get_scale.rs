@@ -203,7 +203,6 @@ fn main() {
     // }
     let ret = unsafe {
         let p = std::mem::transmute::<&mut zxdg_output_v1, *mut wayland_sys::client::wl_proxy>(&mut proxy);
-        wayland_sys::client::wl_proxy_destroy(p);
         wayland_sys::client::wl_proxy_add_listener(p,
             std::mem::transmute::<&mut zxdg_output_v1_listener, *mut(extern fn())>(&mut listener),
             ptr::null_mut())
