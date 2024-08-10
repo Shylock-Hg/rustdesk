@@ -9,6 +9,8 @@ use hbb_common::platform::register_breakdown_handler;
 use hbb_common::{config, log};
 #[cfg(windows)]
 use tauri_winrt_notification::{Duration, Sound, Toast};
+use std::sync::OnceLock;
+
 
 #[macro_export]
 macro_rules! my_println{
@@ -21,6 +23,8 @@ macro_rules! my_println{
         );
     };
 }
+
+pub static scale: OnceLock<f64> = OnceLock::new();
 
 /// shared by flutter and sciter main function
 ///
@@ -40,6 +44,7 @@ pub fn core_main() -> Option<Vec<String>> {
     let mut _is_quick_support = false;
     let mut _is_flutter_invoke_new_connection = false;
     let mut arg_exe = Default::default();
+    let mut meet_scale = false;
     for arg in std::env::args() {
         if i == 0 {
             arg_exe = arg;
@@ -62,8 +67,19 @@ pub fn core_main() -> Option<Vec<String>> {
                 _is_run_as_system = true;
             } else if arg == "--quick_support" {
                 _is_quick_support = true;
+            } else if arg == "--scale" {
+                meet_scale = true;
             } else {
-                args.push(arg);
+                if meet_scale {
+                    if let Ok(s) = arg.parse::<f64>() {
+                        scale.set(s);
+                    } else {
+                        return None;
+                    }
+                    meet_scale = false;
+                } else {
+                    args.push(arg);
+                }
             }
         }
         i += 1;
