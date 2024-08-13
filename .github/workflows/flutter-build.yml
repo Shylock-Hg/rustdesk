@@ -1572,7 +1572,7 @@ jobs:
         uses: actions/upload-artifact@master
         if: env.UPLOAD_ARTIFACT == 'true'
         with:
-          name: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.rpm
+          name: rustdesk-${{ env.VERSION }}-0.${{ matrix.job.arch }}.rpm
           path: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.rpm
 
       # only x86_64 for arch since we can not find newest arm64 docker image to build
