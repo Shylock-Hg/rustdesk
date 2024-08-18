@@ -1874,6 +1874,13 @@ jobs:
           files: |
             ./appimage/rustdesk-${{ env.VERSION }}-*.AppImage
 
+      - name: Upload appimage
+        uses: actions/upload-artifact@master
+        if: env.UPLOAD_ARTIFACT == 'true'
+        with:
+          name: ./appimage/rustdesk-${{ env.VERSION }}-*.AppImage
+          path: ./appimage/rustdesk-${{ env.VERSION }}-*.AppImage
+
   build-flatpak:
     name: Build flatpak ${{ matrix.job.target }}${{ matrix.job.suffix }}
     needs:
@@ -1974,6 +1981,13 @@ jobs:
           tag_name: ${{ env.TAG_NAME }}
           files: |
             flatpak/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.flatpak
+
+      - name: Upload flatpak
+        uses: actions/upload-artifact@master
+        if: env.UPLOAD_ARTIFACT == 'true'
+        with:
+          name: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.flatpak
+          path: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}${{ matrix.job.suffix }}.flatpak
 
   build-rustdesk-web:
     if: False
