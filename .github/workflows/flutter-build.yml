@@ -1610,6 +1610,13 @@ jobs:
           files: |
             res/rustdesk-${{ env.VERSION }}*.zst
 
+      - name: Upload archlinux
+        uses: actions/upload-artifact@master
+        if: env.UPLOAD_ARTIFACT == 'true'
+        with:
+          name: rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.pkg.tar.zst
+          path: res/rustdesk-${{ env.VERSION }}-${{ matrix.job.arch }}.pkg.tar.zst
+
   build-rustdesk-linux-sciter:
     if: ${{ inputs.upload-artifact }}
     needs: build-rustdesk-linux # not for dep, just make it run later for parallelism
